@@ -165,17 +165,18 @@ local isRight = (j % 2 == 0); local sign = isRight and 1 or -1
 local animationIndex = math.ceil(j / 2)
 local distanceIndex = isRight and (j - 2) / 2 or (j - 1) / 2
 
--- Spacingが0に近いほど中心に集まる  
-            local xOffset = Spacing * (distanceIndex + 0.2) * sign   
-            local waveOffset = WaveAmplitude * math.sin(WaveSpeed * tAccum + animationIndex * WaveConstant)  
-            local twistOscillation = math.sin(TwistSpeed * tAccum + animationIndex * TwistWave)  
-            local currentTwistAngle = math.rad(TwistAngle * twistOscillation * (distanceIndex / (#list / 2)))   
-              
-            local targetCFrame = wingsCenter * CFrame.Angles(currentTwistAngle, 0, 0) * CFrame.new(xOffset, waveOffset, 0)  
-            if p:FindFirstChild("BodyVelocity") then p.BodyVelocity.Velocity = (targetCFrame.Position - p.Position) * 20 end  
-            if p:FindFirstChild("BodyGyro") then p.BodyGyro.CFrame = targetCFrame end  
-        end  
-    end  
+-- Spacingが0に近いほど中心に集まる
+local xOffset = Spacing * (distanceIndex + 0.2) * sign
+local waveOffset = WaveAmplitude * math.sin(WaveSpeed * tAccum + animationIndex * WaveConstant)
+local twistOscillation = math.sin(TwistSpeed * tAccum + animationIndex * TwistWave)
+local currentTwistAngle = math.rad(TwistAngle * twistOscillation * (distanceIndex / (#list / 2)))
+
+local targetCFrame = wingsCenter * CFrame.Angles(currentTwistAngle, 0, 0) * CFrame.new(xOffset, waveOffset, 0)    
+        if p:FindFirstChild("BodyVelocity") then p.BodyVelocity.Velocity = (targetCFrame.Position - p.Position) * 20 end    
+        if p:FindFirstChild("BodyGyro") then p.BodyGyro.CFrame = targetCFrame end    
+    end    
+end
+
 end)
 
 end
@@ -300,60 +301,60 @@ local function createESP(player)
 if player == LP then return end
 if ESPObjects[player] then return end
 
-local gui = Instance.new("BillboardGui")  
-gui.Name = "TPHubESP"  
-gui.Size = UDim2.new(0, 220, 0, 90)  
-gui.StudsOffset = Vector3.new(0, 2.5, 0)  
-gui.AlwaysOnTop = true  
+local gui = Instance.new("BillboardGui")
+gui.Name = "TPHubESP"
+gui.Size = UDim2.new(0, 220, 0, 90)
+gui.StudsOffset = Vector3.new(0, 2.5, 0)
+gui.AlwaysOnTop = true
 
-local frame = Instance.new("Frame")  
-frame.Size = UDim2.new(1, 0, 1, 0)  
-frame.BackgroundColor3 = Color3.fromRGB(20,20,20)  
-frame.BackgroundTransparency = 0.2  
-frame.BorderSizePixel = 1  
-frame.Parent = gui  
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(1, 0, 1, 0)
+frame.BackgroundColor3 = Color3.fromRGB(20,20,20)
+frame.BackgroundTransparency = 0.2
+frame.BorderSizePixel = 1
+frame.Parent = gui
 
-Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 8)  
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 8)
 
-local img = Instance.new("ImageLabel")  
-img.Size = UDim2.new(0, 64, 0, 64)  
-img.Position = UDim2.new(0, 6, 0, 12)  
-img.BackgroundTransparency = 1  
-img.Image = getHeadshot(player.UserId)  
-img.Parent = frame  
+local img = Instance.new("ImageLabel")
+img.Size = UDim2.new(0, 64, 0, 64)
+img.Position = UDim2.new(0, 6, 0, 12)
+img.BackgroundTransparency = 1
+img.Image = getHeadshot(player.UserId)
+img.Parent = frame
 
-local nameLabel = Instance.new("TextLabel")  
-nameLabel.Position = UDim2.new(0, 80, 0, 18)  
-nameLabel.Size = UDim2.new(1, -90, 0, 22)  
-nameLabel.BackgroundTransparency = 1  
-nameLabel.Text = player.DisplayName  
-nameLabel.TextColor3 = Color3.new(1,1,1)  
-nameLabel.TextScaled = true  
-nameLabel.Font = Enum.Font.GothamBold  
-nameLabel.Parent = frame  
+local nameLabel = Instance.new("TextLabel")
+nameLabel.Position = UDim2.new(0, 80, 0, 18)
+nameLabel.Size = UDim2.new(1, -90, 0, 22)
+nameLabel.BackgroundTransparency = 1
+nameLabel.Text = player.DisplayName
+nameLabel.TextColor3 = Color3.new(1,1,1)
+nameLabel.TextScaled = true
+nameLabel.Font = Enum.Font.GothamBold
+nameLabel.Parent = frame
 
-local idLabel = Instance.new("TextLabel")  
-idLabel.Position = UDim2.new(0, 80, 0, 42)  
-idLabel.Size = UDim2.new(1, -90, 0, 20)  
-idLabel.BackgroundTransparency = 1  
-idLabel.Text = "ID : "..player.UserId  
-idLabel.TextColor3 = Color3.fromRGB(180,180,180)  
-idLabel.TextScaled = true  
-idLabel.Font = Enum.Font.Gotham  
-idLabel.Parent = frame  
+local idLabel = Instance.new("TextLabel")
+idLabel.Position = UDim2.new(0, 80, 0, 42)
+idLabel.Size = UDim2.new(1, -90, 0, 20)
+idLabel.BackgroundTransparency = 1
+idLabel.Text = "ID : "..player.UserId
+idLabel.TextColor3 = Color3.fromRGB(180,180,180)
+idLabel.TextScaled = true
+idLabel.Font = Enum.Font.Gotham
+idLabel.Parent = frame
 
-ESPObjects[player] = gui  
+ESPObjects[player] = gui
 
-local function attach()  
-    if player.Character and player.Character:FindFirstChild("Head") then  
-        gui.Parent = player.Character.Head  
-    end  
-end  
+local function attach()
+if player.Character and player.Character:FindFirstChild("Head") then
+gui.Parent = player.Character.Head
+end
+end
 
-attach()  
-player.CharacterAdded:Connect(function()  
-    task.wait(1)  
-    attach()  
+attach()
+player.CharacterAdded:Connect(function()
+task.wait(1)
+attach()
 end)
 
 end
@@ -465,37 +466,38 @@ targetLoopConn = RunService.Heartbeat:Connect(function(dt)
 local root = getTargetHRP()
 if not root or #list == 0 then return end
 
-tAccum = tAccum + dt  
-    local wingsCenter = root.CFrame * CFrame.new(SideOffset, WingHeight, BackOffset)  
-    local WaveConstant = math.pi / #list  
+tAccum = tAccum + dt
+local wingsCenter = root.CFrame * CFrame.new(SideOffset, WingHeight, BackOffset)
+local WaveConstant = math.pi / #list
 
-    for j = 1, #list do  
-        local rec = list[j]  
-        local p = rec.part  
-        if p and p.Parent then  
-            local isRight = (j % 2 == 0)  
-            local sign = isRight and 1 or -1  
-            local animationIndex = math.ceil(j / 2)  
-            local distanceIndex = isRight and (j - 2) / 2 or (j - 1) / 2  
+for j = 1, #list do    
+    local rec = list[j]    
+    local p = rec.part    
+    if p and p.Parent then    
+        local isRight = (j % 2 == 0)    
+        local sign = isRight and 1 or -1    
+        local animationIndex = math.ceil(j / 2)    
+        local distanceIndex = isRight and (j - 2) / 2 or (j - 1) / 2    
 
-            local xOffset = Spacing * (distanceIndex + 0.2) * sign  
-            local waveOffset = WaveAmplitude * math.sin(WaveSpeed * tAccum + animationIndex * WaveConstant)  
-            local twistOscillation = math.sin(TwistSpeed * tAccum + animationIndex * TwistWave)  
-            local currentTwistAngle = math.rad(TwistAngle * twistOscillation)  
+        local xOffset = Spacing * (distanceIndex + 0.2) * sign    
+        local waveOffset = WaveAmplitude * math.sin(WaveSpeed * tAccum + animationIndex * WaveConstant)    
+        local twistOscillation = math.sin(TwistSpeed * tAccum + animationIndex * TwistWave)    
+        local currentTwistAngle = math.rad(TwistAngle * twistOscillation)    
 
-            local targetCFrame =  
-                wingsCenter  
-                * CFrame.Angles(currentTwistAngle, 0, 0)  
-                * CFrame.new(xOffset, waveOffset, 0)  
+        local targetCFrame =    
+            wingsCenter    
+            * CFrame.Angles(currentTwistAngle, 0, 0)    
+            * CFrame.new(xOffset, waveOffset, 0)    
 
-            if p:FindFirstChild("BodyVelocity") then  
-                p.BodyVelocity.Velocity = (targetCFrame.Position - p.Position) * 20  
-            end  
-            if p:FindFirstChild("BodyGyro") then  
-                p.BodyGyro.CFrame = targetCFrame  
-            end  
-        end  
-    end  
+        if p:FindFirstChild("BodyVelocity") then    
+            p.BodyVelocity.Velocity = (targetCFrame.Position - p.Position) * 20    
+        end    
+        if p:FindFirstChild("BodyGyro") then    
+            p.BodyGyro.CFrame = targetCFrame    
+        end    
+    end    
+end
+
 end)
 
 end
@@ -514,11 +516,11 @@ if WingsTargetPlayer
 and WingsTargetPlayer.Character
 and WingsTargetPlayer.Character:FindFirstChild("HumanoidRootPart") then
 
-return WingsTargetPlayer.Character.HumanoidRootPart  
-end  
+return WingsTargetPlayer.Character.HumanoidRootPart
+end
 
--- デフォルト（自分）  
-local c = LP.Character or LP.CharacterAdded:Wait()  
+-- デフォルト（自分）
+local c = LP.Character or LP.CharacterAdded:Wait()
 return c:FindFirstChild("HumanoidRootPart")
 
 end
@@ -547,7 +549,7 @@ WingsTargetPlayer = Players:FindFirstChild(v)
 end
 end
 })
--------------------------------------------------------------------
+
 -- WINGS 竜巻モード（羽ON不要・固定値・完全追加）
 
 local TornadoEnabled = false
@@ -560,83 +562,86 @@ local TORNADO_SPIN_SPEED = 4
 local tornadoConn = nil
 
 local function startTornado()
-    if tornadoConn then tornadoConn:Disconnect() end
+if tornadoConn then tornadoConn:Disconnect() end
 
-    -- 対象を即スキャン（羽ON不要）
-    rescan()
+-- 対象を即スキャン（羽ON不要）  
+rescan()  
 
-    tornadoConn = RunService.Heartbeat:Connect(function(dt)
-        local root = HRP()
-        if not root or #list == 0 then return end
+tornadoConn = RunService.Heartbeat:Connect(function(dt)  
+    local root = HRP()  
+    if not root or #list == 0 then return end  
 
-        tAccum += dt
-        local baseCF = root.CFrame
+    tAccum += dt  
+    local baseCF = root.CFrame  
 
-        for i, rec in ipairs(list) do
-            local p = rec.part
-            if p and p.Parent then
-                local heightOffset = (i / #list) * TORNADO_HEIGHT
-                local angle =
-                    (tAccum * TORNADO_SPIN_SPEED)
-                    + (i * math.pi * 2 / #list)
+    for i, rec in ipairs(list) do  
+        local p = rec.part  
+        if p and p.Parent then  
+            local heightOffset = (i / #list) * TORNADO_HEIGHT  
+            local angle =  
+                (tAccum * TORNADO_SPIN_SPEED)  
+                + (i * math.pi * 2 / #list)  
 
-                local x = math.cos(angle) * TORNADO_RADIUS
-                local z = math.sin(angle) * TORNADO_RADIUS
-                local y = heightOffset
+            local x = math.cos(angle) * TORNADO_RADIUS  
+            local z = math.sin(angle) * TORNADO_RADIUS  
+            local y = heightOffset  
 
-                local targetCFrame =
-                    baseCF
-                    * CFrame.new(x, y, z)
-                    * CFrame.Angles(0, angle, 0)
+            local targetCFrame =  
+                baseCF  
+                * CFrame.new(x, y, z)  
+                * CFrame.Angles(0, angle, 0)  
 
-                if p:FindFirstChild("BodyVelocity") then
-                    p.BodyVelocity.Velocity =
-                        (targetCFrame.Position - p.Position) * 30
-                end
+            if p:FindFirstChild("BodyVelocity") then  
+                p.BodyVelocity.Velocity =  
+                    (targetCFrame.Position - p.Position) * 30  
+            end  
 
-                if p:FindFirstChild("BodyGyro") then
-                    p.BodyGyro.CFrame = targetCFrame
-                end
-            end
-        end
-    end)
+            if p:FindFirstChild("BodyGyro") then  
+                p.BodyGyro.CFrame = targetCFrame  
+            end  
+        end  
+    end  
+end)
+
 end
 
 local function stopTornado()
-    if tornadoConn then
-        tornadoConn:Disconnect()
-        tornadoConn = nil
-    end
+if tornadoConn then
+tornadoConn:Disconnect()
+tornadoConn = nil
+end
 
-    -- 後処理
-    for _, rec in ipairs(list) do
-        detachPhysics(rec)
-    end
-    list = {}
+-- 後処理  
+for _, rec in ipairs(list) do  
+    detachPhysics(rec)  
+end  
+list = {}
+
 end
 
 -- UI（WINGSタブにトグルのみ追加）
 WingTab:AddToggle({
-    Name = "竜巻モード",
-    Default = false,
-    Callback = function(v)
-        TornadoEnabled = v
+Name = "竜巻モード",
+Default = false,
+Callback = function(v)
+TornadoEnabled = v
 
-        if v then
-            -- 羽ループが動いてたら止める
-            if loopConn then loopConn:Disconnect() end
-            startTornado()
-        else
-            stopTornado()
-            -- 羽ON状態なら自動復帰
-            if Enabled then
-                rescan()
-                startLoop()
-            end
-        end
-    end
+if v then  
+        -- 羽ループが動いてたら止める  
+        if loopConn then loopConn:Disconnect() end  
+        startTornado()  
+    else  
+        stopTornado()  
+        -- 羽ON状態なら自動復帰  
+        if Enabled then  
+            rescan()  
+            startLoop()  
+        end  
+    end  
+end
+
 })
--------------------------------------------------------------------
+
 -- WINGS 円モード（羽ON不要・固定値・完全追加）
 
 local CircleEnabled = false
@@ -649,88 +654,118 @@ local CIRCLE_SPEED = 10
 local circleConn = nil
 
 local function startCircle()
-    if circleConn then circleConn:Disconnect() end
+if circleConn then circleConn:Disconnect() end
 
-    -- 羽ON不要で即取得
-    rescan()
+-- 羽ON不要で即取得  
+rescan()  
 
-    circleConn = RunService.Heartbeat:Connect(function(dt)
-        local root = HRP()
-        if not root or #list == 0 then return end
+circleConn = RunService.Heartbeat:Connect(function(dt)  
+    local root = HRP()  
+    if not root or #list == 0 then return end  
 
-        tAccum += dt
-        local baseCF = root.CFrame
+    tAccum += dt  
+    local baseCF = root.CFrame  
 
-        for i, rec in ipairs(list) do
-            local p = rec.part
-            if p and p.Parent then
-                local angle =
-                    (i / #list) * math.pi * 2
-                    + (tAccum * CIRCLE_SPEED)
+    for i, rec in ipairs(list) do  
+        local p = rec.part  
+        if p and p.Parent then  
+            local angle =  
+                (i / #list) * math.pi * 2  
+                + (tAccum * CIRCLE_SPEED)  
 
-                local x = math.cos(angle) * CIRCLE_RADIUS
-                local z = math.sin(angle) * CIRCLE_RADIUS
-                local y = CIRCLE_HEIGHT
+            local x = math.cos(angle) * CIRCLE_RADIUS  
+            local z = math.sin(angle) * CIRCLE_RADIUS  
+            local y = CIRCLE_HEIGHT  
 
-                local targetCFrame =
-                    baseCF
-                    * CFrame.new(x, y, z)
-                    * CFrame.Angles(0, angle, 0)
+            local targetCFrame =  
+                baseCF  
+                * CFrame.new(x, y, z)  
+                * CFrame.Angles(0, angle, 0)  
 
-                if p:FindFirstChild("BodyVelocity") then
-                    p.BodyVelocity.Velocity =
-                        (targetCFrame.Position - p.Position) * 30
-                end
+            if p:FindFirstChild("BodyVelocity") then  
+                p.BodyVelocity.Velocity =  
+                    (targetCFrame.Position - p.Position) * 30  
+            end  
 
-                if p:FindFirstChild("BodyGyro") then
-                    p.BodyGyro.CFrame = targetCFrame
-                end
-            end
-        end
-    end)
+            if p:FindFirstChild("BodyGyro") then  
+                p.BodyGyro.CFrame = targetCFrame  
+            end  
+        end  
+    end  
+end)
+
 end
 
 local function stopCircle()
-    if circleConn then
-        circleConn:Disconnect()
-        circleConn = nil
-    end
+if circleConn then
+circleConn:Disconnect()
+circleConn = nil
+end
 
-    for _, rec in ipairs(list) do
-        detachPhysics(rec)
-    end
-    list = {}
+for _, rec in ipairs(list) do  
+    detachPhysics(rec)  
+end  
+list = {}
+
 end
 
 -- UI（WINGSタブにトグル1個だけ）
 WingTab:AddToggle({
-    Name = "円モード",
-    Default = false,
-    Callback = function(v)
-        CircleEnabled = v
+Name = "円モード",
+Default = false,
+Callback = function(v)
+CircleEnabled = v
 
-        if v then
-            -- 羽 / 竜巻 / 星 が動いてたら止める
-            if loopConn then loopConn:Disconnect() end
-            if tornadoConn then tornadoConn:Disconnect() end
-            startCircle()
-        else
-            stopCircle()
-            -- 羽ON状態なら自動復帰
-            if Enabled then
-                rescan()
-    startLoop()
-            end
-        end
-    end
+if v then  
+        -- 羽 / 竜巻 / 星 が動いてたら止める  
+        if loopConn then loopConn:Disconnect() end  
+        if tornadoConn then tornadoConn:Disconnect() end  
+        startCircle()  
+    else  
+        stopCircle()  
+        -- 羽ON状態なら自動復帰  
+        if Enabled then  
+            rescan()  
+startLoop()  
+        end  
+    end  
+end
+
 })
--------------------------------------------------------------------
+
 -- WINGS 警告表示（一番下に貼るだけでOK）
 
 task.delay(0.5, function()
-    OrionLib:MakeNotification({
-        Name = "⚠️ 警告",
-        Content = "現在 Stick 以外は使用できません",
-        Time = 4
-    })
+OrionLib:MakeNotification({
+Name = "⚠️ 警告",
+Content = "現在 Stick 以外は使用できません",
+Time = 4
+})
 end)
+-------------------------------------------------------------------
+-- WINGS 羽ばたき強化（後付け・下に貼るだけ）
+
+local ExtraFlapPower = 1 -- 0〜10
+
+-- スライダー追加（既存UIに干渉しない）
+WingTab:AddSlider({
+    Name = "羽の振動パワー",
+    Min = 0,
+    Max = 10,
+    Default = 1,
+    Increment = 0.5,
+    Callback = function(v)
+        ExtraFlapPower = v
+    end
+})
+
+-- 羽ばたき増幅（既存ループを壊さない）
+RunService.Heartbeat:Connect(function()
+    if not Enabled then return end
+    if #list == 0 then return end
+
+    -- WaveAmplitude を一時的に強化
+    _G.__WingOriginalAmp = _G.__WingOriginalAmp or WaveAmplitude
+    WaveAmplitude = _G.__WingOriginalAmp * (1 + ExtraFlapPower)
+end)
+-------------------------------------------------------------------
