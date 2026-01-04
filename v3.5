@@ -769,3 +769,92 @@ RunService.Heartbeat:Connect(function()
     WaveAmplitude = _G.__WingOriginalAmp * (1 + ExtraFlapPower)
 end)
 -------------------------------------------------------------------
+
+-- 【確定版】竜巻＆円モード リアルタイム・スライダー・セクション
+-------------------------------------------------------------------
+
+-- 1. 変数の初期化（スライダーと連動）
+TORNADO_SPEED = TORNADO_SPEED or 4
+TORNADO_RADIUS = TORNADO_RADIUS or 13.5
+TORNADO_HEIGHT = TORNADO_HEIGHT or 23
+
+CIRCLE_SPEED = CIRCLE_SPEED or 10
+CIRCLE_RADIUS = CIRCLE_RADIUS or 13.5
+CIRCLE_HEIGHT = CIRCLE_HEIGHT or 2
+
+-- 2. 既存の関数をリアルタイム参照型に上書き
+function startTornado()
+    if tornadoConn then tornadoConn:Disconnect() end
+    rescan()  
+    tornadoConn = RunService.Heartbeat:Connect(function(dt)  
+        local baseCF = _G.CurrentBaseCF or (HRP() and HRP().CFrame)
+        if not baseCF or #list == 0 then return end  
+        tAccum = tAccum + dt  
+        for i, rec in ipairs(list) do  
+            local p = rec.part  
+            if p and p.Parent then  
+                local heightOffset = (i / #list) * TORNADO_HEIGHT  
+                local angle = (tAccum * (TORNADO_SPEED / 2)) + (i * math.pi * 2 / #list)  
+                local x = math.cos(angle) * TORNADO_RADIUS  
+                local z = math.sin(angle) * TORNADO_RADIUS  
+                local targetCFrame = baseCF * CFrame.new(x, heightOffset, z) * CFrame.Angles(0, angle, 0)  
+                if p:FindFirstChild("BodyVelocity") then p.BodyVelocity.Velocity = (targetCFrame.Position - p.Position) * 30 end  
+                if p:FindFirstChild("BodyGyro") then p.BodyGyro.CFrame = targetCFrame end  
+            end  
+        end  
+    end)
+end
+
+function startCircle()
+    if circleConn then circleConn:Disconnect() end
+    rescan()  
+    circleConn = RunService.Heartbeat:Connect(function(dt)  
+        local baseCF = _G.CurrentBaseCF or (HRP() and HRP().CFrame)
+        if not baseCF or #list == 0 then return end  
+        tAccum = tAccum + dt  
+        for i, rec in ipairs(list) do  
+            local p = rec.part  
+            if p and p.Parent then  
+                local angle = (i / #list) * math.pi * 2 + (tAccum * (CIRCLE_SPEED / 2))  
+                local x = math.cos(angle) * CIRCLE_RADIUS  
+                local z = math.sin(angle) * CIRCLE_RADIUS  
+                local targetCFrame = baseCF * CFrame.new(x, CIRCLE_HEIGHT, z) * CFrame.Angles(0, angle, 0)  
+                if p:FindFirstChild("BodyVelocity") then p.BodyVelocity.Velocity = (targetCFrame.Position - p.Position) * 30 end  
+                if p:FindFirstChild("BodyGyro") then p.BodyGyro.CFrame = targetCFrame end  
+            end  
+        end  
+    end)
+end
+
+-- 3. UIにスライダーを表示させる
+WingTab:AddSection({Name = "🌪️ 竜巻モード・カスタム"})
+
+WingTab:AddSlider({
+    Name = "竜巻 速度", Min = 1, Max = 50, Default = 4, Increment = 1,
+    Callback = function(v) TORNADO_SPEED = v end
+})
+WingTab:AddSlider({
+    Name = "竜巻 半径", Min = 1, Max = 100, Default = 13, Increment = 1,
+    Callback = function(v) TORNADO_RADIUS = v end
+})
+WingTab:AddSlider({
+    Name = "竜巻 高さ", Min = 1, Max = 150, Default = 23, Increment = 1,
+    Callback = function(v) TORNADO_HEIGHT = v end
+})
+
+WingTab:AddSection({Name = "⭕ 円モード・カスタム"})
+
+WingTab:AddSlider({
+    Name = "円 速度", Min = 1, Max = 50, Default = 10, Increment = 1,
+    Callback = function(v) CIRCLE_SPEED = v end
+})
+WingTab:AddSlider({
+    Name = "円 半径", Min = 1, Max = 100, Default = 13, Increment = 1,
+    Callback = function(v) CIRCLE_RADIUS = v end
+})
+WingTab:AddSlider({
+    Name = "円 高さ", Min = -20, Max = 100, Default = 2, Increment = 1,
+    Callback = function(v) CIRCLE_HEIGHT = v end
+})
+
+OrionLib:MakeNotification({Name = "UI更新", Content = "スライダーを展開しました。", Time = 4})
